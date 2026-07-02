@@ -9,8 +9,32 @@ const PORT = 3000;
 app.use(express.json());
 
 // File paths for persistence
-const APPOINTMENTS_FILE = path.join(process.cwd(), 'appointments.json');
-const NOTIFICATIONS_FILE = path.join(process.cwd(), 'notifications.json');
+const isVercel = !!process.env.VERCEL;
+const storageDir = isVercel ? '/tmp' : process.cwd();
+const APPOINTMENTS_FILE = path.join(storageDir, 'appointments.json');
+const NOTIFICATIONS_FILE = path.join(storageDir, 'notifications.json');
+
+// Copy preloaded files to /tmp in serverless environment if they don't exist yet
+if (isVercel) {
+  const originalAppointments = path.join(process.cwd(), 'appointments.json');
+  const originalNotifications = path.join(process.cwd(), 'notifications.json');
+  
+  try {
+    if (!fs.existsSync(APPOINTMENTS_FILE) && fs.existsSync(originalAppointments)) {
+      fs.copyFileSync(originalAppointments, APPOINTMENTS_FILE);
+    }
+  } catch (err) {
+    console.error('Error copying appointments.json to /tmp:', err);
+  }
+
+  try {
+    if (!fs.existsSync(NOTIFICATIONS_FILE) && fs.existsSync(originalNotifications)) {
+      fs.copyFileSync(originalNotifications, NOTIFICATIONS_FILE);
+    }
+  } catch (err) {
+    console.error('Error copying notifications.json to /tmp:', err);
+  }
+}
 
 // Preloaded mock services
 const DENTAL_SERVICES = [
