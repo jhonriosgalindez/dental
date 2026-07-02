@@ -14,7 +14,6 @@ Una plataforma web full-stack moderna, intuitiva y de alto rendimiento diseñada
 - **Consola de Control**: Panel exclusivo para los profesionales clínicos y administradores.
 - **Gestión de Estados**: Permite filtrar, aprobar, reprogramar o cancelar citas registradas en tiempo real.
 - **Monitoreo de Notificaciones**: Registro integrado de alertas y eventos del sistema.
-- **Acceso a la consola de control**: Usuario: admin | Password: 123.
 
 ---
 
