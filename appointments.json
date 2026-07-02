@@ -1,20 +1,5 @@
 [
   {
-    "id": "apt-101",
-    "patientName": "Juan Sebastián Gómez",
-    "patientEmail": "juan.gomez@example.com",
-    "patientPhone": "+57 312 456 7890",
-    "serviceId": "1",
-    "serviceName": "Limpieza Dental Profunda",
-    "dentistId": "d1",
-    "dentistName": "Dr. Alejandro Ruiz",
-    "date": "2026-07-02",
-    "timeSlot": "09:00",
-    "notes": "Paciente con encías sensibles al frío.",
-    "status": "confirmed",
-    "createdAt": "2026-07-02T18:23:35.002Z"
-  },
-  {
     "id": "apt-102",
     "patientName": "Gabriela Silva Castro",
     "patientEmail": "gaby.silva@example.com",
@@ -28,21 +13,5 @@
     "notes": "Desea aclarar hasta 3 tonos.",
     "status": "pending",
     "createdAt": "2026-07-02T18:23:35.002Z"
-  },
-  {
-    "id": "apt-1783016651127",
-    "patientName": "Jhon Fernando Rios Galindez",
-    "patientEmail": "r.jhonf@gmail.com",
-    "patientPhone": "3001234567",
-    "serviceId": "4",
-    "serviceName": "Diseño de Sonrisa",
-    "dentistId": "d3",
-    "dentistName": "Dr. Carlos Estrada",
-    "date": "2026-07-11",
-    "timeSlot": "17:00",
-    "notes": "",
-    "googleEventId": "ra80avlitkhm2hn6v0mfvabrmk",
-    "status": "confirmed",
-    "createdAt": "2026-07-02T18:24:11.127Z"
   }
 ]
