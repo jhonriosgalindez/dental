@@ -53,16 +53,29 @@ const DENTISTS = [
   { id: 'd3', name: 'Dr. Carlos Estrada', role: 'Odontopediatra Especialista', imageUrl: 'https://images.unsplash.com/photo-1537368910025-700350fe46c7?auto=format&fit=crop&q=80&w=300', specialty: 'Odontología Infantil', availableDays: [2, 3, 5, 6] }
 ];
 
-// Helper to read JSON database files safely
+// Helper to read JSON database files safely with automatic healing if corrupt or empty
 function readDbFile(filePath: string, defaultContent: any): any {
   try {
     if (fs.existsSync(filePath)) {
-      const data = fs.readFileSync(filePath, 'utf-8');
-      return JSON.parse(data);
+      const data = fs.readFileSync(filePath, 'utf-8').trim();
+      if (!data) {
+        console.warn(`File ${filePath} is empty. Healing with default content.`);
+        writeDbFile(filePath, defaultContent);
+        return defaultContent;
+      }
+      try {
+        return JSON.parse(data);
+      } catch (parseError) {
+        console.error(`JSON parse error in ${filePath}. Healing with default content. Error:`, parseError);
+        writeDbFile(filePath, defaultContent);
+        return defaultContent;
+      }
     }
   } catch (error) {
     console.error(`Error reading ${filePath}:`, error);
   }
+  // If file doesn't exist, create it with defaultContent
+  writeDbFile(filePath, defaultContent);
   return defaultContent;
 }
 
@@ -77,71 +90,69 @@ function writeDbFile(filePath: string, content: any): boolean {
   }
 }
 
-// Ensure files are initialized with realistic items if empty
-if (!fs.existsSync(APPOINTMENTS_FILE)) {
-  const initialAppointments = [
-    {
-      id: 'apt-101',
-      patientName: 'Juan Sebastián Gómez',
-      patientEmail: 'juan.gomez@example.com',
-      patientPhone: '+57 312 456 7890',
-      serviceId: '1',
-      serviceName: 'Limpieza Dental Profunda',
-      dentistId: 'd1',
-      dentistName: 'Dr. Alejandro Ruiz',
-      date: '2026-07-02',
-      timeSlot: '09:00',
-      notes: 'Paciente con encías sensibles al frío.',
-      status: 'confirmed',
-      createdAt: new Date().toISOString()
-    },
-    {
-      id: 'apt-102',
-      patientName: 'Gabriela Silva Castro',
-      patientEmail: 'gaby.silva@example.com',
-      patientPhone: '+57 320 987 6543',
-      serviceId: '3',
-      serviceName: 'Blanqueamiento Dental LED',
-      dentistId: 'd2',
-      dentistName: 'Dra. Sofía Mendoza',
-      date: '2026-07-03',
-      timeSlot: '14:30',
-      notes: 'Desea aclarar hasta 3 tonos.',
-      status: 'pending',
-      createdAt: new Date().toISOString()
-    }
-  ];
-  writeDbFile(APPOINTMENTS_FILE, initialAppointments);
-}
+// Ensure files are initialized with realistic items if empty or corrupted
+const initialAppointments = [
+  {
+    id: 'apt-101',
+    patientName: 'Juan Sebastián Gómez',
+    patientEmail: 'juan.gomez@example.com',
+    patientPhone: '+57 312 456 7890',
+    serviceId: '1',
+    serviceName: 'Limpieza Dental Profunda',
+    dentistId: 'd1',
+    dentistName: 'Dr. Alejandro Ruiz',
+    date: '2026-07-02',
+    timeSlot: '09:00',
+    notes: 'Paciente con encías sensibles al frío.',
+    status: 'confirmed',
+    createdAt: new Date().toISOString()
+  },
+  {
+    id: 'apt-102',
+    patientName: 'Gabriela Silva Castro',
+    patientEmail: 'gaby.silva@example.com',
+    patientPhone: '+57 320 987 6543',
+    serviceId: '3',
+    serviceName: 'Blanqueamiento Dental LED',
+    dentistId: 'd2',
+    dentistName: 'Dra. Sofía Mendoza',
+    date: '2026-07-03',
+    timeSlot: '14:30',
+    notes: 'Desea aclarar hasta 3 tonos.',
+    status: 'pending',
+    createdAt: new Date().toISOString()
+  }
+];
 
-if (!fs.existsSync(NOTIFICATIONS_FILE)) {
-  const initialNotifications = [
-    {
-      id: 'notif-1',
-      recipient: 'juan.gomez@example.com',
-      recipientRole: 'client',
-      subject: 'Confirmación de tu Cita Dental - Dental Spa',
-      htmlBody: `
-        <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #e2e8f0; border-radius: 8px; padding: 24px;">
-          <h2 style="color: #134e4a; font-size: 20px; border-bottom: 2px solid #0f766e; padding-bottom: 8px;">¡Tu cita está confirmada!</h2>
-          <p>Hola <strong>Juan Sebastián Gómez</strong>,</p>
-          <p>Queremos confirmar que tu cita de odontología ha sido agendada con éxito.</p>
-          <div style="background-color: #f0fdfa; padding: 16px; border-radius: 6px; margin: 20px 0;">
-            <p style="margin: 4px 0;"><strong>Servicio:</strong> Limpieza Dental Profunda</p>
-            <p style="margin: 4px 0;"><strong>Odontólogo:</strong> Dr. Alejandro Ruiz</p>
-            <p style="margin: 4px 0;"><strong>Fecha:</strong> Jueves, 2 de Julio de 2026</p>
-            <p style="margin: 4px 0;"><strong>Hora:</strong> 09:00 AM</p>
-          </div>
-          <p>Si necesitas reprogramar o cancelar, por favor comunícate con nosotros con al menos 24 horas de anticipación.</p>
-          <p style="color: #64748b; font-size: 12px; margin-top: 30px; text-align: center;">Clínica Dental Spa & Estética • Calle 100 #15-30, Bogotá</p>
+const initialNotifications = [
+  {
+    id: 'notif-1',
+    recipient: 'juan.gomez@example.com',
+    recipientRole: 'client',
+    subject: 'Confirmación de tu Cita Dental - Dental Spa',
+    htmlBody: `
+      <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #e2e8f0; border-radius: 8px; padding: 24px;">
+        <h2 style="color: #134e4a; font-size: 20px; border-bottom: 2px solid #0f766e; padding-bottom: 8px;">¡Tu cita está confirmada!</h2>
+        <p>Hola <strong>Juan Sebastián Gómez</strong>,</p>
+        <p>Queremos confirmar que tu cita de odontología ha sido agendada con éxito.</p>
+        <div style="background-color: #f0fdfa; padding: 16px; border-radius: 6px; margin: 20px 0;">
+          <p style="margin: 4px 0;"><strong>Servicio:</strong> Limpieza Dental Profunda</p>
+          <p style="margin: 4px 0;"><strong>Odontólogo:</strong> Dr. Alejandro Ruiz</p>
+          <p style="margin: 4px 0;"><strong>Fecha:</strong> Jueves, 2 de Julio de 2026</p>
+          <p style="margin: 4px 0;"><strong>Hora:</strong> 09:00 AM</p>
         </div>
-      `,
-      sentAt: new Date().toISOString(),
-      type: 'booking_confirmation'
-    }
-  ];
-  writeDbFile(NOTIFICATIONS_FILE, initialNotifications);
-}
+        <p>Si necesitas reprogramar o cancelar, por favor comunícate con nosotros con al menos 24 horas de anticipación.</p>
+        <p style="color: #64748b; font-size: 12px; margin-top: 30px; text-align: center;">Clínica Dental Spa & Estética • Calle 100 #15-30, Bogotá</p>
+      </div>
+    `,
+    sentAt: new Date().toISOString(),
+    type: 'booking_confirmation'
+  }
+];
+
+// Initialize database files with robust checks
+readDbFile(APPOINTMENTS_FILE, initialAppointments);
+readDbFile(NOTIFICATIONS_FILE, initialNotifications);
 
 // API Routes
 
