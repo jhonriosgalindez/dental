@@ -8,6 +8,7 @@ import AppointmentBooker from './components/AppointmentBooker';
 import Contact from './components/Contact';
 import AdminPanel from './components/AdminPanel';
 import { DentalService, Dentist } from './types';
+import { FALLBACK_SERVICES, FALLBACK_DENTISTS } from './data';
 import { initAuth, googleSignIn, logout } from './lib/firebase';
 import { User as FirebaseUser } from 'firebase/auth';
 import { motion } from 'motion/react';
@@ -26,9 +27,9 @@ export default function App() {
     time?: string;
   } | null>(null);
 
-  // Lists loaded from backend API
-  const [services, setServices] = useState<DentalService[]>([]);
-  const [dentists, setDentists] = useState<Dentist[]>([]);
+  // Lists loaded from backend API with local robust fallbacks
+  const [services, setServices] = useState<DentalService[]>(FALLBACK_SERVICES);
+  const [dentists, setDentists] = useState<Dentist[]>(FALLBACK_DENTISTS);
 
   // Selection states for booking redirections
   const [selectedServiceId, setSelectedServiceId] = useState<string>('');

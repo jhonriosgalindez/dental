@@ -4,7 +4,7 @@ import fs from 'fs';
 import { createServer as createViteServer } from 'vite';
 
 const app = express();
-const PORT = 3001;
+const PORT = 3000;
 
 app.use(express.json());
 
@@ -394,9 +394,13 @@ async function startServer() {
     });
   }
 
-  app.listen(PORT, '0.0.0.0', () => {
-    console.log(`Dental server running on port ${PORT}`);
-  });
+  if (!process.env.VERCEL) {
+    app.listen(PORT, '0.0.0.0', () => {
+      console.log(`Dental server running on port ${PORT}`);
+    });
+  }
 }
 
 startServer();
+
+export default app;
