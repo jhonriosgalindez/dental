@@ -1,0 +1,6 @@
+{
+  "name": "Clínica Dental",
+  "description": "Sitio web para negocio de dentista con agendamiento de citas en línea integrado con Google Calendar y notificaciones por correo electrónico.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
