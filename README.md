@@ -97,14 +97,6 @@ npm run start
 
 ---
 
-## 🦷 Catálogo de Dentistas Pre-cargados
-La plataforma incluye perfiles reales de especialistas con roles y agendas de disponibilidad dinámicas:
-1. **Dr. Alejandro Ruiz** — *Implantólogo & Rehabilitador* (Especialidad en Implantes y Rehabilitación Oral)
-2. **Dra. Sofía Mendoza** — *Ortodoncista Clínica* (Especialidad en Ortodoncia Invisible y Estética)
-3. **Dr. Carlos Estrada** — *Odontopediatra Especialista* (Especialidad en Odontología Infantil)
-
----
-
 ## 📖 Contrato de Diseño y Accesibilidad
 La aplicación se construyó siguiendo estrictas normas estéticas y operativas:
 - **Contraste y Legibilidad**: Uso de colores suaves como hueso (`stone-50`), verde azulado profundo (`teal-950`) y acentos orgánicos de arena para una navegación relajante.
